@@ -84,7 +84,7 @@
             }, 
             "put": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Update an existing pet", 
                 "description": "", 
@@ -129,10 +129,10 @@
                 ]
             }
         }, 
-        "/pet/findByStatus": {
+        "/file/findByStatus": {
             "get": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Finds Pets by status", 
                 "description": "Multiple status values can be provided with comma separated strings", 
@@ -184,10 +184,10 @@
                 ]
             }
         }, 
-        "/pet/findByTags": {
+        "/file/findByTags": {
             "get": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Finds Pets by tags", 
                 "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.", 
@@ -234,10 +234,10 @@
                 "deprecated": true
             }
         }, 
-        "/pet/{petId}": {
+        "/file/{petId}": {
             "get": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Find pet by ID", 
                 "description": "Returns a single pet", 
@@ -278,7 +278,7 @@
             }, 
             "post": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Updates a pet in the store with form data", 
                 "description": "", 
@@ -330,7 +330,7 @@
             }, 
             "delete": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Deletes a pet", 
                 "description": "", 
@@ -373,10 +373,10 @@
                 ]
             }
         }, 
-        "/pet/{petId}/uploadImage": {
+        "/file/{petId}/uploadImage": {
             "post": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "uploads an image", 
                 "description": "", 
