@@ -18,7 +18,7 @@
     "tags": [
         {
             "name": "file", 
-            "description": "Everything about your Pets", 
+            "description": "Everything about the file API", 
             "externalDocs": {
                 "description": "Find out more", 
                 "url": "https://openfog.github.io"
@@ -26,13 +26,13 @@
         }, 
         {
             "name": "store", 
-            "description": "Access to Petstore orders"
+            "description": "store/or upload"
         }, 
         {
             "name": "user", 
             "description": "Operations about user", 
             "externalDocs": {
-                "description": "Find out more about our store", 
+                "description": "Find out more about the user terms", 
                 "url": "https://openfog.github.io"
             }
         }
@@ -44,7 +44,7 @@
         "/file": {
             "post": {
                 "tags": [
-                    "pet"
+                    "file"
                 ], 
                 "summary": "Add a new pet to the store", 
                 "description": "", 
