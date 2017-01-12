@@ -17,6 +17,10 @@
     "basePath": "/v1/multi-down", 
     "tags": [
         {
+            "name": "Scheduler", 
+            "description": "request and send files"
+        }, 
+        {
             "name": "file", 
             "description": "request and send files"
         }, 
@@ -120,22 +124,175 @@
                     }
                 }
             }
+        },
+        "/scheduler/peers": {
+            "post": {
+                "tags": [
+                    "Scheduler"
+                ], 
+                "operationId": "Scheduler", 
+
+                "parameters": [
+                    {
+                        "in": "body", 
+                        "name": "body", 
+                        "required": true, 
+                        "schema": {
+                            "$ref": "#/definitions/PeersReq"
+                        }
+                    }
+                ], 
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/Peers"
+                        }
+                    }
+                }
+            }
         }
+
     }, 
+
  
     "definitions": {
 
+        "Peers": {
+            "type": "object", 
+            "properties": {
+
+                "peers_http": {
+                    "type": "integer", 
+                    "example": 15
+                },
+                "peers_datachannel": {
+                    "type": "integer", 
+                    "example": 18
+                },
+
+                "peers": {
+
+                        "type": "array", 
+                        "xml": {
+                            "name": "tag", 
+                            "wrapped": true
+                        }, 
+                        "items": {
+                            "$ref": "#/definitions/Peer"
+                        }
+                }
+            }, 
+            "xml": {
+                "name": "Peers"
+            }
+        },
+ 
+        "Peer": {
+            "type": "object", 
+            "properties": {
+                    "ip": {
+                        "type": "string", 
+                        "example": "119.28.2.207"
+                    }, 
+                    "port": {
+                        "type": "string",
+                        "example": "18752"
+                    }, 
+                    "type": {
+                            "type": "string", 
+                            "enum": [
+                                "http", 
+                                "datachannel", 
+                                "websocket"
+                            ]
+                    }
+            },
+            "xml": {
+                "name": "Peer"
+            }
+        } ,
+
+        "PeersReq": {
+            "type": "object", 
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "64c773a355b3c75e1b79f63a46aa2158"
+                }, 
+                "date": {
+                    "type": "string", 
+                    "format": "date-time"
+                }, 
+                "os": {
+                    "type": "string", 
+                    "enum": [
+                        "linux", 
+                        "window", 
+                        "apple"
+                    ]
+                }, 
+                "browser": {
+                    "type": "string", 
+                    "enum": [
+                        "firefox", 
+                        "chrome", 
+                        "afari", 
+                        "IE", 
+                        "opera"
+                    ]
+                },
+                "nat_type": {
+                    "type": "string", 
+                    "enum": [
+                        "full_cone", 
+                        "ip_restricted", 
+                        "port_restricted", 
+                        "symmetric"
+                    ]
+                }, 
+
+                "webrtc": {
+                    "type": "boolean", 
+                    "default": true
+                },
+
+                "file": {
+                            "properties": {
+                                    "index": {
+                                        "type": "integer", 
+                                        "example": 1
+                                    }, 
+                                    "uuid": {
+                                        "type": "string",
+                                        "example": "uuid"
+                                    }, 
+                                    "url": {
+                                            "type": "string", 
+                                            "example": "vedio/pear.mp4"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "video/mp4"
+                                    }
+                            }
+                }
+            }, 
+            "xml": {
+                "name": "PeersReq"
+            }
+        },
 
         "TokenReq": {
             "type": "object", 
             "properties": {
                 "peerid": {
                     "type": "string",
-                    "example": "peerid"
+                    "example": "c4ecefb847c3b34bd45a4f81befc78d9"
                 }, 
                 "peersecret": {
                     "type": "string",
-                    "example": "peersecret"
+                    "example": "972bb04c38383fae108b0c135fc007b4"
                 }
             }, 
             "xml": {
@@ -147,7 +304,7 @@
             "properties": {
                 "access_token": {
                     "type": "string",
-                    "example": "access_token"
+                    "example": "64c773a355b3c75e1b79f63a46aa2158"
                 }, 
                 "expires_in": {
                     "type": "integer", 
