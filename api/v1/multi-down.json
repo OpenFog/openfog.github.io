@@ -21,12 +21,8 @@
             "description": "request and send files"
         }, 
         {
-            "name": "user", 
-            "description": "Operations about user", 
-            "externalDocs": {
-                "description": "Find out more about the user terms", 
-                "url": "https://openfog.github.io"
-            }
+            "name": "token", 
+            "description": "Operations about token"
         }
     ], 
     "schemes": [
@@ -39,7 +35,6 @@
                     "file"
                 ], 
                 "summary": "Get a file or a chunk request", 
-                "operationId": "placeOrder", 
                 "parameters": [
                     {
                         "in": "body", 
@@ -57,7 +52,6 @@
                 "tags": [
                     "file"
                 ], 
-                "operationId": "placeOrder", 
 
                 "responses": {
                     "200": {
@@ -74,8 +68,6 @@
                 "tags": [
                     "file"
                 ], 
-                "operationId": "placeOrder", 
-
                 "responses": {
                     "200": {
                         "description": "successful operation", 
@@ -91,8 +83,6 @@
                 "tags": [
                     "file"
                 ], 
-                "operationId": "placeOrder", 
-
                 "responses": {
                     "200": {
                         "description": "successful operation", 
@@ -104,54 +94,71 @@
             }
         }, 
 
-        "/user": {
+        "/token": {
             "post": {
                 "tags": [
-                    "user"
+                    "token"
                 ], 
-                "summary": "Create user", 
-                "description": "This can only be done by the logged in user.", 
-                "operationId": "createUser", 
-                "produces": [
-                    "application/xml", 
-                    "application/json"
-                ], 
+                "operationId": "token", 
+
                 "parameters": [
                     {
                         "in": "body", 
                         "name": "body", 
-                        "description": "Created user object", 
                         "required": true, 
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "$ref": "#/definitions/TokenReq"
                         }
                     }
                 ], 
                 "responses": {
-                    "default": {
-                        "description": "successful operation"
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/Token"
+                        }
                     }
                 }
             }
         }
     }, 
-    "securityDefinitions": {
-        "petstore_auth": {
-            "type": "oauth2", 
-            "authorizationUrl": "http://petstore.swagger.io/oauth/dialog", 
-            "flow": "implicit", 
-            "scopes": {
-                "write:pets": "modify pets in your account", 
-                "read:pets": "read your pets"
-            }
-        }, 
-        "api_key": {
-            "type": "apiKey", 
-            "name": "api_key", 
-            "in": "header"
-        }
-    }, 
+ 
     "definitions": {
+
+
+        "TokenReq": {
+            "type": "object", 
+            "properties": {
+                "peerid": {
+                    "type": "string",
+                    "example": "peerid"
+                }, 
+                "peersecret": {
+                    "type": "string",
+                    "example": "peersecret"
+                }
+            }, 
+            "xml": {
+                "name": "TokenReq"
+            }
+        },
+        "Token": {
+            "type": "object", 
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "access_token"
+                }, 
+                "expires_in": {
+                    "type": "integer", 
+                    "example": 3600
+                }
+            }, 
+            "xml": {
+                "name": "TokenReq"
+            }
+        },
+
 
         "FileReq": {
             "type": "object", 
