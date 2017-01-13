@@ -94,7 +94,7 @@
 <div  class="swagger-ui-wrap">
   </P>
   JS API in the browser is simple (no plugins) V1.1:
-      <pre ><code class="js">
+      <pre ><code class="c">
           var FogVDN = require('Fogvdn');
           var fogvdn =  new FogVDN("FirstAid | FastMesh");
 
@@ -104,6 +104,7 @@
               },
               onEnd: function(data) {  
                   console.log("[pear] Down file end") ; 
+                  // handle you business logic with data.url
               },
               onProgress: function(data) {
                   console.log("[pear] Receive piece index " + data.currentPosition + "/" + data.maxChunks); 
@@ -117,7 +118,7 @@
 <div  class="swagger-ui-wrap">
   </P>
   JS API in the browser is simple (no plugins) V1.0:
-      <pre ><code class="js">
+      <pre ><code class="c">
           var FogVDN = require('Fogvdn');
           var fogvdn =  new FogVDN();
           var firstaid = new FirstAid();
