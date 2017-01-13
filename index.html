@@ -96,9 +96,7 @@
   JS API in the browser is simple (no plugins) V1.1:
       <pre ><code class="c">
           var FogVDN = require('Fogvdn');
-          var fogvdn =  new FogVDN("FirstAid | FastMesh");
-
-          var callback = {
+          var fogvdn =  new FogVDN("FirstAid | FastMesh",function ()  {
               onBegin: function(data) {
                   console.log("[pear] Down file begin");       
               },
@@ -109,8 +107,8 @@
               onProgress: function(data) {
                   console.log("[pear] Receive piece index " + data.currentPosition + "/" + data.maxChunks); 
               }
-          };
-          fogvdn.setCallback(callback);
+          });
+
           fogvdn.getFile("vedio/pear.mp4");
       </code></pre>
 </div>
