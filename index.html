@@ -95,45 +95,20 @@
   </P>
   JS API in the browser is simple (no plugins) V1.1:
       <pre ><code class="c">
-          var FogVDN = require('Fogvdn');
-          var fogvdn =  new FogVDN("FirstAid | FastMesh",function ()  {
+          var FogVDN = require('FogVDN');
+          var fogvdn = new FogVDN("FirstAid | FastMesh", function() {
               onBegin: function(data) {
                   console.log("[pear] Down file begin");       
               },
               onEnd: function(data) {  
-                  console.log("[pear] Down file end") ; 
+                  console.log("[pear] Down file end"); 
                   // handle you business logic with data.url
               },
               onProgress: function(data) {
-                  console.log("[pear] Receive piece index " + data.currentPosition + "/" + data.maxChunks); 
+                  console.log("[pear] Received index " + data.currentPosition + "/" + data.maxChunks); 
               }
           });
 
-          fogvdn.getFile("vedio/pear.mp4");
-      </code></pre>
-</div>
-
-<div  class="swagger-ui-wrap">
-  </P>
-  JS API in the browser is simple (no plugins) V1.0:
-      <pre ><code class="c">
-          var FogVDN = require('Fogvdn');
-          var fogvdn =  new FogVDN();
-          var firstaid = new FirstAid();
-          fogvdn.setStrategy(firstaid);
-
-          var callback = {
-              onBegin: function(data) {
-                  console.log("[pear] Down file begin");       
-              },
-              onEnd: function(data) {  
-                  console.log("[pear] Down file end") ; 
-              },
-              onProgress: function(data) {
-                  console.log("[pear] Receive piece index " + data.currentPosition + "/" + data.maxChunks); 
-              }
-          };
-          fogvdn.setCallback(callback);
           fogvdn.getFile("vedio/pear.mp4");
       </code></pre>
 </div>
