@@ -1,0 +1,875 @@
+swagger: "2.0"
+info:
+    version: "1.0.0"
+    title: Pear Restful API
+    description: Pear 诞生于雾中大学（香港科技大学）的校园内，她是一个将“雾计算”技术由概念转化为现实的创新型企业。遵循 “XaaS”（X-as-a-Service）哲学，结合众包范式，凝聚共享经济，Pear用无尽资源将网络扩大，提供可靠的服务，使“雾计算”的冰山一角开始展现于世人面前。
+
+host: api.webrtc.win
+basePath: /v1
+tags:
+  - name: CP
+    description: 内容提供商(Content Provider, CP) 服务交互API
+  - name: OSS
+    description: CP用户管理API
+  - name: NMS
+    description: 节点用户管理API
+schemes: 
+    - https
+    - http
+paths: 
+    /customer/login: 
+        post: 
+            tags: 
+              - CP
+            summary: CP用户登陆
+            operationId: cpLogin
+            consumes: 
+              - application/json
+            produces:
+              - application/json
+            parameters: 
+              - in: body
+                name: body
+                description: CpLogin cp object
+                required: true
+                schema: 
+                    $ref: "#/definitions/CpLoginRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid username/password supplied
+    /customer/nodes:
+        get:
+            tags:
+              - CP
+            summary: 获取提供Web服务的在线节点
+            operationId: cpGetNodes
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: query
+                name: host
+                type: string
+                description: video host
+                required: true
+              - in: query
+                name: uri
+                type: string
+                description: video uri
+                required: true
+              - in: query
+                name: scheme
+                type: string
+                description: video scheme
+              - in: query
+                name: client_ip
+                type: string
+                description: client ip
+                required: true
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /customer/video/state: 
+        post:
+            tags:
+              - CP
+            summary: CP上报分发调度状态
+            operationId: cpUpdateVideoState
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: body
+                name: body
+                description: CDN video state
+                schema:
+                    type: array
+                    items:
+                        $ref: "#/definitions/VideoState"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+                
+    /oss/cp/login: 
+        post:
+            tags:
+              - OSS
+            summary: CP用户登陆
+            operationId: cpUserLogin
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            parameters:
+              - in: body
+                name: body
+                description: CP login object
+                required: true
+                schema:
+                    $ref: "#/definitions/WebLoginRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid username/password supplied
+    /oss/cp/signup:
+        post:
+            tags:
+              - OSS
+            summary: CP用户注册
+            operationId: cpUserSignup
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            parameters:
+              - in: body
+                name: body
+                description: CP user object
+                required: true
+                schema:
+                    $ref: "#/definitions/CpSignupRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /oss/cp/{user_id}/logout:
+        post:
+            tags:
+              - OSS
+            summary: CP用户退出
+            operationId: cpUserLogout
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+
+    /oss/cp/{user_id}/hosts:
+        get:
+            tags:
+              - OSS
+            summary: 获取域名列表
+            operationId: getCpHosts
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+        post:
+            tags:
+              - OSS
+            summary: 添加域名
+            operationId: addCpHost
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: Cp host object
+                required: true
+                schema: 
+                    type: object
+                    properties:
+                        host:
+                            type: string
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /oss/cp/{user_id}/hosts/{host_id}:
+        post:
+            tags:
+              - OSS
+            summary: 删除域名
+            operationId: deleteCpHost
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+              - in: path
+                name: host_id
+                description: CP host id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /oss/cp/{user_id}/cache/configs:
+        get:
+            tags:
+              - OSS
+            summary: 获取缓存配置信息
+            operationId: getCpCacheConfigs
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+        post:
+            tags:
+              - OSS
+            summary: 添加缓存配置信息
+            operationId: addCpCacheConfig
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: CP cache config object
+                required: true
+                schema:
+                    $ref: "#/definitions/CpCacheConfigRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /oss/cp/{user_id}/traffic:
+        get:
+            tags:
+              - OSS
+            summary: 流量统计
+            operationId: getCpTraffic
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: start_date
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: end_date
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /oss/cp/{user_id}/bandwidth:
+        get:
+            tags:
+              - OSS
+            summary: 带宽统计
+            operationId: getCpBandwidth
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: CP user id
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: start_date
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: end_date
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+
+
+    /vdn/owner/login: 
+        post:
+            tags:
+              - NMS
+            summary: 节点用户登陆
+            operationId: nodeOwnerLogin
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            parameters:
+              - in: body
+                name: body
+                description: NodeOwner login object
+                required: true
+                schema:
+                    $ref: "#/definitions/WebLoginRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid username/password supplied
+    /vdn/owner/signup:
+        post:
+            tags: 
+              - NMS
+            summary: 节点用户注册
+            operationId: nodeOwnerSignup
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            parameters:
+              - in: body
+                name: body
+                description: NodeOwner user object
+                required: true
+                schema:
+                    $ref: "#/definitions/OwnerSignupRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/logout:
+        post:
+            tags:
+              - NMS
+            summary: 节点用户退出
+            operationId: nodeOwnerLogout
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+    /vdn/owner/{user_id}:
+        get:
+            tags:
+              - NMS
+            summary: 节点用户基本信息
+            operationId: nodeOwnerInfo
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+    /vdn/owner/{user_id}/password:
+        post:
+            tags:
+              - NMS
+            summary: 修改密码
+            operationId: nodeOwnerUpdatePassword
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: password update object
+                required: true
+                schema:
+                    $ref: "#/definitions/UpdatePasswordRequest"
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+
+
+
+
+    /vdn/owner/forget_password:
+        get:
+            tags:
+              - NMS
+            summary: 忘记密码
+            operationId: nodeOwnerForgetPassword
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            parameters:
+              - in: query
+                name: email
+                required: true
+                type: string
+              - in: query
+                name: username
+                required: true
+                type: string
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/phone:
+        post:
+            tags:
+              - NMS
+            summary: 手机绑定
+            operationId: nodeOwnerBindPhone
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: phone object
+                required: true
+                schema:
+                    type: object
+                    properties:
+                        phone:
+                            type: string
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/email:
+        post:
+            tags:
+              - NMS
+            summary: 邮箱绑定
+            operationId: nodeOwnerBindEmail
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: email object
+                required: true
+                schema:
+                    type: object
+                    properties:
+                        email:
+                            type: string
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/node:
+        post:
+            tags:
+              - NMS
+            summary: 节点绑定
+            operationId: nodeOwnerBindNode
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+              - in: body
+                name: body
+                description: node object
+                required: true
+                schema:
+                    type: object
+                    properties:
+                        mac_addr:
+                            type: string
+                        sn:
+                            type: string
+                        platform:
+                            type: string
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/nodes:
+        get:
+            tags:
+              - NMS
+            summary: 获取节点信息
+            operationId: getNodeOwnerNodes
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: NodeOwner id
+                required: true
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+
+
+    /vdn/owner/{user_id}/traffic:
+        get:
+            tags:
+              - NMS
+            summary: 流量统计
+            operationId: ownerTraffic
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: user id
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: mac_addr
+                description: MAC address
+                type: string
+              - in: query
+                name: start_date
+                description: start date
+                type: integer
+                format: int32
+              - in: query
+                name: end_date
+                description: end date
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+    /vdn/owner/{user_id}/bandwidth:
+        get:
+            tags:
+              - NMS
+            summary: 带宽统计
+            operationId: ownerBandwidth
+            consumes:
+              - application/json
+            produces:
+              - application/json
+            security: 
+              - ApiKeyAuth: []
+            parameters:
+              - in: path
+                name: user_id
+                description: user id
+                required: true
+                type: integer
+                format: int32
+              - in: query
+                name: mac_addr
+                description: MAC address
+                type: string
+              - in: query
+                name: start_date
+                description: start date
+                type: integer
+                format: int32
+              - in: query
+                name: end_date
+                description: end date
+                type: integer
+                format: int32
+            responses:
+                200:
+                    description: successful operation
+                400:
+                    description: Invalid argument
+
+securityDefinitions:
+    ApiKeyAuth:
+        type: apiKey
+        name: X-Pear-Token
+        in: header
+definitions: 
+    CpLoginRequest:
+        type: object
+        required:
+          - user
+          - password
+        properties:
+            user:
+                type: string
+            password:
+                type: string
+    VideoState:
+        type: object
+        properties:
+            video:
+                $ref: "#/definitions/VideoId"
+            regions:
+                type: array
+                items:
+                    $ref: "#/definitions/Region"
+    VideoId:
+        type: object
+        required:
+          - host
+          - uri
+        properties:
+            scheme:
+                type: string
+            host:
+                type: string
+            uri:
+                type: string
+    Region:
+        type: object
+        properties:
+            city_id:
+                type: integer
+                format: int64
+            country:
+                type: string
+            region:
+                type: string
+            province:
+                type: string
+            city:
+                type: string
+            isp:
+                type: string
+            olt:
+                type: string
+    WebLoginRequest:
+        type: object
+        required:
+            - user_name
+            - password
+        properties:
+            user_name:
+                type: string
+            password:
+                type: string
+    CpSignupRequest:
+        type: object
+        required:
+            - user_name
+            - password
+        properties:
+            user_name:
+                type: string
+            password:
+                type: string
+    OwnerSignupRequest:
+        type: object
+        required:
+            - user_name
+            - password
+        properties:
+            user_name:
+                type: string
+            password:
+                type: string
+            email:
+                type: string
+    UpdatePasswordRequest:
+        type: object
+        required:
+            - new_password
+            - old_password
+        properties:
+            new_password:
+                type: string
+            old_password:
+                type: string
+    CpCacheConfigRequest:
+        type: object
+        properties:
+            type:
+                type: string
+            videos:
+                type: array
+                items:
+                    properties:
+                        scheme:
+                            type: string
+                        host:
+                            type: string
+                        uri:
+                            type: string
+                        popularity:
+                            type: integer
+                            format: int32
+
+    ApiResponse:
+        type: object
+        properties:
+            code:
+                type: integer
+                format: int32
+            type:
+                type: string
+            message:
+                type: string
+externalDocs:
+    description: 了解更多
+    url: https://pear.hk/
+
