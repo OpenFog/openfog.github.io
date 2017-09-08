@@ -752,10 +752,10 @@ definitions:
     CpLoginRequest:
         type: object
         required:
-          - user
+          - username
           - password
         properties:
-            user:
+            username:
                 type: string
             password:
                 type: string
